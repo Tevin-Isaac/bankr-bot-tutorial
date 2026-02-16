@@ -685,11 +685,8 @@ import { fileURLToPath } from 'url';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-console.log(chalk.blue.bold(\`
-🎓 Welcome to your ${templateName} tutorial!
-🚀 Let's build a production-ready crypto application together
-\${frontend !== 'none' ? \`\\n🎨 Frontend: \${frontend === 'react' ? 'React with Vite' : 'Next.js'}\` : ''}
-\`));
+console.log(chalk.blue.bold('🎓 Welcome to your ${templateName} tutorial!'));
+console.log('🚀 Let's build a production-ready crypto application together' + (frontend !== 'none' ? \`\\n🎨 Frontend: \${frontend === 'react' ? 'React with Vite' : 'Next.js'}\` : ''));
 
 // Tutorial content for each template
 const tutorialSteps = {
