@@ -26,10 +26,11 @@
   "author": "Bankr DevRel Team",
   "license": "MIT",
   "dependencies": {
-    "inquirer": "^9.2.12",
     "chalk": "^5.3.0",
     "commander": "^11.1.0",
+    "create-bankr-app": "file:create-bankr-app-1.0.0.tgz",
     "fs-extra": "^11.1.1",
+    "inquirer": "^9.2.12",
     "ora": "^7.0.1",
     "validate-npm-package-name": "^5.0.0"
   },
@@ -38,10 +39,10 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/bankr-bot/create-bankr-app.git"
+    "url": "https://github.com/Tevin-Isaac/bankr-bot-tool.git"
   },
   "bugs": {
-    "url": "https://github.com/bankr-bot/create-bankr-app/issues"
+    "url": "https://github.com/Tevin-Isaac/bankr-bot-tool/issues"
   },
-  "homepage": "https://github.com/bankr-bot/create-bankr-app#readme"
+  "homepage": "https://github.com/Tevin-Isaac/bankr-bot-tool#readme"
 }

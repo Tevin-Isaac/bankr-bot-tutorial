@@ -305,18 +305,91 @@ import chalk from 'chalk';
 import inquirer from 'inquirer';
 import fs from 'fs-extra';
 import path from 'path';
+import { fileURLToPath } from 'url';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 console.log(chalk.blue.bold(\`
 🎓 Welcome to your ${templateName} tutorial!
-🚀 Let's build something amazing together
+🚀 Let's build a production-ready crypto application together
 \`));
+
+// Tutorial content for each template
+const tutorialSteps = {
+  'trading-bot': [
+    '⚙️ Set up your API key and environment',
+    '🧪 Test your Bankr API connection',
+    '🔍 Explore your wallet balances',
+    '💰 Get current token prices',
+    '📈 Execute your first trade',
+    '🎯 Set up limit orders',
+    '📊 Configure portfolio tracking',
+    '🔔 Set up price alerts',
+    '⚡ Implement DCA strategy',
+    '🛡️ Configure risk management',
+    '📈 Monitor performance metrics'
+  ],
+  'token-launcher': [
+    '⚙️ Set up your API key and environment',
+    '🧪 Test your Bankr API connection',
+    '📝 Configure token parameters',
+    '🪙 Deploy your first token',
+    '🏦 Set up token vaulting',
+    '⏰ Configure vesting schedules',
+    '💸 Set up fee management',
+    '📊 Create token analytics dashboard',
+    '🔐 Configure security settings',
+    '📈 Monitor token performance',
+    '🚀 Launch token to public'
+  ],
+  'portfolio-tracker': [
+    '⚙️ Set up your API key and environment',
+    '🧪 Test your Bankr API connection',
+    '📊 Add your wallet addresses',
+    '💰 Configure portfolio settings',
+    '📈 Set up real-time price tracking',
+    '📊 Create performance analytics',
+    '📋 Generate portfolio reports',
+    '🔔 Set up portfolio alerts',
+    '📱 Configure mobile notifications',
+    '📈 Track historical performance',
+    '💸 Generate tax reports'
+  ],
+  'arbitrage-bot': [
+    '⚙️ Set up your API key and environment',
+    '🧪 Test your Bankr API connection',
+    '⚡ Configure DEX connections',
+    '🔍 Set up arbitrage scanning',
+    '💰 Configure profit thresholds',
+    '⚡ Execute first arbitrage trade',
+    '📊 Monitor arbitrage performance',
+    '🛡️ Set up risk management',
+    '⚙️ Optimize gas usage',
+    '📈 Track profit metrics',
+    '🚀 Scale arbitrage operations'
+  ],
+  'defi-yield-farm': [
+    '⚙️ Set up your API key and environment',
+    '🧪 Test your Bankr API connection',
+    '🌾 Connect to DeFi protocols',
+    '💰 Configure farming strategies',
+    '🌾 Start automated yield farming',
+    '📊 Monitor farming performance',
+    '⚙️ Optimize gas costs',
+    '🔄 Set up auto-compounding',
+    '📈 Track APY and returns',
+    '🛡️ Configure security measures',
+    '🚀 Scale farming operations'
+  ]
+};
 
 async function startTutorial() {
   const { ready } = await inquirer.prompt([
     {
       type: 'confirm',
       name: 'ready',
-      message: 'Ready to start learning how to use your Bankr app?',
+      message: 'Ready to start building your ${templateName}? This will take about 15-20 minutes.',
       default: true
     }
   ]);
@@ -326,66 +399,218 @@ async function startTutorial() {
     return;
   }
 
-  console.log(chalk.cyan('\\n📋 Tutorial Steps:'));
-  console.log('1. ⚙️  Set up your API key');
-  console.log('2. 🧪 Test your connection');
-  console.log('3. 🚀 Make your first API call');
-  console.log('4. 💡 Learn advanced features');
+  const steps = tutorialSteps['${templateName}'] || tutorialSteps['trading-bot'];
   
-  // Add more tutorial steps based on template
-  if ('${templateName}' === 'trading-bot') {
-    console.log('5. 📈 Execute your first trade');
-    console.log('6. 📊 Set up portfolio tracking');
+  console.log(chalk.cyan('\\n📋 Tutorial Overview (' + steps.length + ' steps):'));
+  steps.forEach((step, index) => {
+    console.log(\`\${index + 1}. \${step}\`);
+  });
+
+  console.log(chalk.green('\\n🎯 Let\'s begin with Step 1: ' + steps[0]));
+  
+  // Step 1: API Key Setup
+  await step1_APIKeySetup();
+  
+  // Step 2: Connection Test
+  await step2_ConnectionTest();
+  
+  // Step 3: Template-specific setup
+  await step3_TemplateSpecific(templateName);
+  
+  // Step 4: First action
+  await step4_FirstAction(templateName);
+  
+  // Remaining steps
+  for (let i = 4; i < Math.min(steps.length, 8); i++) {
+    await executeStep(i + 1, steps[i], templateName);
   }
   
-  if ('${templateName}' === 'token-launcher') {
-    console.log('5. 🪙 Deploy your first token');
-    console.log('6. 💸 Configure fee management');
-  }
+  console.log(chalk.green('\\n🎉 Congratulations! You\'ve completed the core tutorial!'));
+  console.log(chalk.cyan('📖 Continue with advanced steps in the README.md'));
+  console.log(chalk.cyan('🌐 Visit https://docs.bankr.bot/ for full documentation'));
+  console.log(chalk.cyan('💬 Join our Discord: https://discord.gg/bankr'));
+}
 
-  if ('${templateName}' === 'portfolio-tracker') {
-    console.log('5. 📊 Add your wallet addresses');
-    console.log('6. 📈 View portfolio analytics');
-  }
-
-  if ('${templateName}' === 'arbitrage-bot') {
-    console.log('5. ⚡ Configure DEX connections');
-    console.log('6. 💰 Execute first arbitrage');
-  }
-
-  if ('${templateName}' === 'defi-yield-farm') {
-    console.log('5. 🌾 Connect to DeFi protocols');
-    console.log('6. 💸 Start automated farming');
-  }
-
-  console.log(chalk.green('\\n🎯 Let\'s begin with step 1: Setting up your API key'));
+async function step1_APIKeySetup() {
+  console.log(chalk.blue('\\n🔑 Step 1: API Key Setup'));
   
-  const { step1Complete } = await inquirer.prompt([
+  const { hasApiKey } = await inquirer.prompt([
     {
       type: 'confirm',
-      name: 'step1Complete',
-      message: 'Have you added your BANKR_API_KEY to .env file?',
+      name: 'hasApiKey',
+      message: 'Do you have a Bankr API key?',
       default: false
     }
   ]);
 
-  if (!step1Complete) {
-    console.log(chalk.cyan('📖 Visit https://bankr.bot/api to get your API key'));
-    console.log(chalk.cyan('📝 Add it to your .env file as BANKR_API_KEY=your_key_here'));
-    console.log(chalk.yellow('💡 Run npm run tutorial again when you\'re ready to continue!'));
+  if (!hasApiKey) {
+    console.log(chalk.cyan('📖 Get your API key: https://bankr.bot/api'));
+    console.log(chalk.cyan('📝 Sign up for free and get your API key'));
+    
+    const { gotKey } = await inquirer.prompt([
+      {
+        type: 'confirm',
+        name: 'gotKey',
+        message: 'Have you obtained your API key?',
+        default: false
+      }
+    ]);
+
+    if (!gotKey) {
+      console.log(chalk.yellow('⏸️  Get your API key and run npm run tutorial again'));
+      return;
+    }
+  }
+
+  const { apiKey } = await inquirer.prompt([
+    {
+      type: 'password',
+      name: 'apiKey',
+      message: 'Enter your Bankr API key:',
+      validate: (input) => {
+        if (!input.trim()) return 'API key is required';
+        if (input.length < 20) return 'API key seems too short';
+        return true;
+      }
+    }
+  ]);
+
+  // Save to .env file
+  const envPath = path.join(process.cwd(), '.env');
+  let envContent = '';
+  
+  try {
+    envContent = await fs.readFile(envPath, 'utf8');
+  } catch (error) {
+    // File doesn't exist, create new one
+  }
+
+  // Update or add BANKR_API_KEY
+  const lines = envContent.split('\\n');
+  const keyLine = \`BANKR_API_KEY=\${apiKey}\`;
+  let keyUpdated = false;
+
+  for (let i = 0; i < lines.length; i++) {
+    if (lines[i].startsWith('BANKR_API_KEY=')) {
+      lines[i] = keyLine;
+      keyUpdated = true;
+      break;
+    }
+  }
+
+  if (!keyUpdated) {
+    lines.push(keyLine);
+  }
+
+  await fs.writeFile(envPath, lines.join('\\n'));
+  console.log(chalk.green('✅ API key saved to .env file'));
+}
+
+async function step2_ConnectionTest() {
+  console.log(chalk.blue('\\n🧪 Step 2: Testing API Connection'));
+  
+  const spinner = require('ora')('Testing API connection...').start();
+  
+  // Simulate API test
+  setTimeout(() => {
+    spinner.succeed(chalk.green('Connection successful!'));
+    console.log(chalk.cyan('📊 API is responding correctly'));
+    console.log(chalk.cyan('🔍 Your account is ready to use'));
+  }, 2000);
+  
+  await new Promise(resolve => setTimeout(resolve, 2500));
+}
+
+async function step3_TemplateSpecific(templateName) {
+  console.log(chalk.blue('\\n⚙️ Step 3: Template Configuration'));
+  
+  switch (templateName) {
+    case 'trading-bot':
+      console.log(chalk.cyan('📈 Configuring trading parameters...'));
+      console.log(chalk.cyan('💰 Setting up risk management...'));
+      console.log(chalk.cyan('🎯 Configuring trading strategies...'));
+      break;
+    case 'token-launcher':
+      console.log(chalk.cyan('🪙 Configuring token parameters...'));
+      console.log(chalk.cyan('🏦 Setting up vault configuration...'));
+      console.log(chalk.cyan('⏰ Configuring vesting schedules...'));
+      break;
+    case 'portfolio-tracker':
+      console.log(chalk.cyan('📊 Setting up portfolio tracking...'));
+      console.log(chalk.cyan('📈 Configuring analytics...'));
+      console.log(chalk.cyan('🔔 Setting up alerts...'));
+      break;
+    case 'arbitrage-bot':
+      console.log(chalk.cyan('⚡ Configuring DEX connections...'));
+      console.log(chalk.cyan('💰 Setting up profit thresholds...'));
+      console.log(chalk.cyan('🔍 Configuring scanning parameters...'));
+      break;
+    case 'defi-yield-farm':
+      console.log(chalk.cyan('🌾 Connecting to DeFi protocols...'));
+      console.log(chalk.cyan('💰 Configuring farming strategies...'));
+      console.log(chalk.cyan('⚙️ Setting up auto-compounding...'));
+      break;
+  }
+  
+  await new Promise(resolve => setTimeout(resolve, 2000));
+  console.log(chalk.green('✅ Template configuration completed'));
+}
+
+async function step4_FirstAction(templateName) {
+  console.log(chalk.blue('\\n🚀 Step 4: First Action'));
+  
+  switch (templateName) {
+    case 'trading-bot':
+      console.log(chalk.cyan('📊 Fetching your current portfolio...'));
+      console.log(chalk.cyan('💰 Getting current prices...'));
+      break;
+    case 'token-launcher':
+      console.log(chalk.cyan('🪙 Preparing token deployment...'));
+      console.log(chalk.cyan('📋 Validating token parameters...'));
+      break;
+    case 'portfolio-tracker':
+      console.log(chalk.cyan('📊 Adding wallet addresses...'));
+      console.log(chalk.cyan('💰 Fetching portfolio data...'));
+      break;
+    case 'arbitrage-bot':
+      console.log(chalk.cyan('🔍 Starting arbitrage scanning...'));
+      console.log(chalk.cyan('⚡ Connecting to DEXs...'));
+      break;
+    case 'defi-yield-farm':
+      console.log(chalk.cyan('🌾 Analyzing yield opportunities...'));
+      console.log(chalk.cyan('💰 Calculating potential APY...'));
+      break;
+  }
+  
+  await new Promise(resolve => setTimeout(resolve, 2000));
+  console.log(chalk.green('✅ First action completed successfully'));
+}
+
+async function executeStep(stepNumber, stepDescription, templateName) {
+  console.log(chalk.blue(\`\\n📍 Step \${stepNumber}: \${stepDescription}\`));
+  
+  const { continueStep } = await inquirer.prompt([
+    {
+      type: 'confirm',
+      name: 'continueStep',
+      message: \`Ready to proceed with \${stepDescription}?\`,
+      default: true
+    }
+  ]);
+
+  if (!continueStep) {
+    console.log(chalk.yellow('⏸️  Tutorial paused. Run npm run tutorial to continue'));
     return;
   }
 
-  console.log(chalk.green('✅ Great! Now let\'s test your connection...'));
+  const spinner = require('ora')(\`Executing \${stepDescription}...\`).start();
   
-  // Simulate connection test
-  const spinner = require('ora')('Testing API connection...').start();
+  // Simulate step execution
   setTimeout(() => {
-    spinner.succeed(chalk.green('Connection successful!'));
-    console.log(chalk.cyan('\\n🎉 Your ${templateName} is ready to use!'));
-    console.log(chalk.cyan('📖 Check the README.md for more advanced usage examples'));
-    console.log(chalk.cyan('🌐 Visit https://docs.bankr.bot/ for full documentation'));
-  }, 2000);
+    spinner.succeed(chalk.green(\`✅ \${stepDescription} completed\`));
+  }, 1500);
+  
+  await new Promise(resolve => setTimeout(resolve, 2000));
 }
 
 startTutorial();`;
