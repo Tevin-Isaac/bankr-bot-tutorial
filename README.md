@@ -6,7 +6,7 @@ Create Bankr App is an interactive CLI tool that scaffolds production-ready cryp
 
 ## ✨ Features
 
-- 🎯 **5 Application Templates**: Trading Bot, Token Launcher, Portfolio Tracker, Arbitrage Bot, DeFi Yield Farm
+- 🎯 **10 Application Templates**: Trading Bot, Token Launcher, Portfolio Tracker, Arbitrage Bot, DeFi Yield Farm, NFT Marketplace, Cross-Chain Bridge, Analytics Dashboard, GameFi Platform, DeFi Bank
 - ⚡ **Multi-Blockchain Support**: Base, Ethereum, Polygon, Unichain, Solana
 - 🛠️ **TypeScript/JavaScript**: Choose your preferred language
 - 📚 **Interactive Tutorials**: Built-in learning for each template
@@ -268,7 +268,7 @@ npm install -g create-bankr-app
 
 - 📖 [Documentation](https://docs.bankr.bot/)
 - 💬 [Discord Community](https://discord.gg/bankr)
-- 🐛 [GitHub Issues](https://github.com/bankr-bot/create-bankr-app/issues)
+- 🐛 [GitHub Issues](https://github.com/Tevin-Isaac/bankr-bot-tool/issues)
 - 📧 [Support Email](mailto:support@bankr.bot)
 
 ## 📄 License
@@ -280,7 +280,7 @@ MIT License - see [LICENSE](LICENSE) file for details.
 - [Bankr Website](https://bankr.bot)
 - [Developer Portal](https://docs.bankr.bot)
 - [API Dashboard](https://bankr.bot/api)
-- [GitHub Repository](https://github.com/bankr-bot/create-bankr-app)
+- [GitHub Repository](https://github.com/Tevin-Isaac/bankr-bot-tool)
 
 ---
 

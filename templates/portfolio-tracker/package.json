@@ -1,0 +1,33 @@
+{
+  "name": "portfolio-tracker",
+  "version": "1.0.0",
+  "description": "A trading-bot built with Bankr",
+  "main": "dist/index.js",
+  "type": "module",
+  "scripts": {
+    "start": "node dist/index.js",
+    "dev": "tsx watch src/index.ts",
+    "build": "tsc",
+    "test": "node --test",
+    "tutorial": "node tutorials/start.js"
+  },
+  "dependencies": {
+    "dotenv": "^16.4.5",
+    "node-fetch": "^3.3.2",
+    "chalk": "^5.3.0",
+    "inquirer": "^9.2.12"
+  },
+  "devDependencies": {
+    "typescript": "^5.3.3",
+    "tsx": "^4.6.2",
+    "nodemon": "^3.1.4"
+  },
+  "keywords": [
+    "bankr",
+    "crypto",
+    "trading-bot",
+    "base"
+  ],
+  "author": "Bankr Developer",
+  "license": "MIT"
+}
