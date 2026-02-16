@@ -8,6 +8,7 @@ Create Bankr App is an interactive CLI tool that scaffolds production-ready cryp
 
 - 🎯 **10 Application Templates**: Trading Bot, Token Launcher, Portfolio Tracker, Arbitrage Bot, DeFi Yield Farm, NFT Marketplace, Cross-Chain Bridge, Analytics Dashboard, GameFi Platform, DeFi Bank
 - ⚡ **Multi-Blockchain Support**: Base, Ethereum, Polygon, Unichain, Solana
+- 🎨 **Frontend Options**: React with Vite, Next.js, or Backend-only
 - 🛠️ **TypeScript/JavaScript**: Choose your preferred language
 - 📚 **Interactive Tutorials**: Built-in learning for each template
 - 🧪 **Testing Setup**: Pre-configured testing environment
@@ -39,10 +40,30 @@ create-bankr-app my-trading-bot
 The CLI will guide you through:
 1. **Project Name**: Choose a name for your application
 2. **Template Selection**: Pick from available application types
-3. **Blockchain Choice**: Select your preferred blockchain
-4. **Feature Configuration**: Customize features for your template
-5. **Language Preference**: TypeScript or JavaScript
-6. **Git Initialization**: Optional git repository setup
+3. **Frontend Framework**: Choose React, Next.js, or Backend-only
+4. **Blockchain Choice**: Select your preferred blockchain
+5. **Feature Configuration**: Customize features for your template
+6. **Language Preference**: TypeScript or JavaScript
+7. **Git Initialization**: Optional git repository setup
+
+## 🎨 Frontend Options
+
+### **🚀 Backend Only (Default)**
+- Perfect for API-focused applications
+- CLI tools and backend services
+- Microservices architecture
+
+### **⚛️ React with Vite**
+- Modern React development experience
+- Fast development server with HMR
+- Optimized build system
+- Perfect for SPAs and dashboards
+
+### **🔷 Next.js Full-Stack**
+- Full-stack React framework
+- Server-side rendering (SSR)
+- API routes built-in
+- Perfect for production applications
 
 ## 🎯 Available Templates
 

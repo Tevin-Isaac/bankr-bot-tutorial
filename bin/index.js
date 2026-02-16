@@ -81,6 +81,26 @@ async function main() {
     },
     {
       type: 'list',
+      name: 'frontend',
+      message: 'Which frontend framework would you like?',
+      choices: [
+        {
+          name: '🚀 None - Backend only (API/CLI)',
+          value: 'none'
+        },
+        {
+          name: '⚛️ React - Modern React with Vite',
+          value: 'react'
+        },
+        {
+          name: '🔷 Next.js - Full-stack React framework',
+          value: 'nextjs'
+        }
+      ],
+      default: 'none'
+    },
+    {
+      type: 'list',
       name: 'blockchain',
       message: 'Which blockchain do you prefer?',
       choices: [
@@ -169,6 +189,11 @@ async function main() {
     const templatePath = path.join(__dirname, '../templates', answers.template);
     await fs.copy(templatePath, projectPath);
     
+    // Add frontend framework if selected
+    if (answers.frontend !== 'none') {
+      await addFrontendFramework(projectPath, answers.frontend, answers.template);
+    }
+    
     // Generate package.json with user preferences
     await generatePackageJson(projectPath, answers);
     
@@ -191,24 +216,42 @@ async function main() {
 🎉 Your ${answers.template} is ready!
 
 📁 Project location: ${projectPath}
+${answers.frontend !== 'none' ? `🎨 Frontend: ${answers.frontend === 'react' ? 'React with Vite' : 'Next.js'}
+📁 Frontend location: ${path.join(projectPath, 'frontend')}` : ''}
 
 🚀 Next steps:
    cd ${answers.projectName}
    npm install
-   npm run dev
+${answers.frontend !== 'none' ? `   # Install frontend dependencies
+   cd frontend
+   npm install
+   cd ..` : ''}
+   npm run dev${answers.frontend !== 'none' ? `    # Start backend
+   # In another terminal, start frontend:
+   cd frontend
+   npm run dev` : ''}
 
 📚 Get started:
    npm run tutorial    # Interactive tutorial
    npm run test        # Run tests
    npm run build       # Build for production
+${answers.frontend !== 'none' ? `   # Build frontend
+   cd frontend
+   npm run build` : ''}
 
 💡 Need help?
    📖 Read the README.md in your project
    🌐 Visit https://docs.bankr.bot/
    💬 Join our Discord: https://discord.gg/bankr
 
-Happy building! 🤖💰
+${answers.frontend !== 'none' ? `🎨 Frontend Development:
+   Your ${answers.frontend === 'react' ? 'React' : 'Next.js'} frontend is configured to connect to your backend API
+   Frontend runs on http://localhost:5173 (React) or http://localhost:3000 (Next.js)
+   Backend API should run on http://localhost:3000
+   Check the frontend/README.md for specific setup instructions` : ''}
 `));
+    
+    console.log('Happy building! 🤖💰');
     
   } catch (error) {
     spinner.fail(chalk.red('❌ Failed to create project'));
@@ -317,8 +360,320 @@ Thumbs.db
   await fs.writeFile(path.join(projectPath, '.gitignore'), gitignoreContent);
 }
 
+async function addFrontendFramework(projectPath, frontend, templateName) {
+  console.log(chalk.cyan(`🎨 Adding ${frontend} frontend...`));
+  
+  if (frontend === 'react') {
+    await addReactFrontend(projectPath, templateName);
+  } else if (frontend === 'nextjs') {
+    await addNextJsFrontend(projectPath, templateName);
+  }
+}
+
+async function addReactFrontend(projectPath, templateName) {
+  // Create React frontend structure
+  const frontendPath = path.join(projectPath, 'frontend');
+  await fs.ensureDir(frontendPath);
+  
+  // Create React app files
+  await fs.writeFile(path.join(frontendPath, 'package.json'), JSON.stringify({
+    name: `${templateName}-frontend`,
+    version: "1.0.0",
+    type: "module",
+    scripts: {
+      dev: "vite",
+      build: "vite build",
+      preview: "vite preview"
+    },
+    dependencies: {
+      react: "^18.2.0",
+      "react-dom": "^18.2.0",
+      axios: "^1.6.0"
+    },
+    devDependencies: {
+      "@types/react": "^18.2.0",
+      "@types/react-dom": "^18.2.0",
+      "@vitejs/plugin-react": "^4.0.0",
+      vite: "^4.4.0"
+    }
+  }, null, 2));
+  
+  await fs.writeFile(path.join(frontendPath, 'index.html'), `<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>${templateName} - React App</title>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.jsx"></script>
+  </body>
+</html>`);
+  
+  await fs.ensureDir(path.join(frontendPath, 'src'));
+  await fs.writeFile(path.join(frontendPath, 'src', 'main.jsx'), `import React from 'react';
+import ReactDOM from 'react-dom/client';
+import App from './App.jsx';
+import './index.css';
+
+ReactDOM.createRoot(document.getElementById('root')).render(
+  <React.StrictMode>
+    <App />
+  </React.StrictMode>
+);`);
+  
+  await fs.writeFile(path.join(frontendPath, 'src', 'App.jsx'), `import React, { useState, useEffect } from 'react';
+import './App.css';
+
+function App() {
+  const [data, setData] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    // Connect to your backend API
+    fetch('http://localhost:3000/api/status')
+      .then(response => response.json())
+      .then(data => {
+        setData(data);
+        setLoading(false);
+      })
+      .catch(error => {
+        console.error('Error fetching data:', error);
+        setLoading(false);
+      });
+  }, []);
+
+  if (loading) {
+    return <div className="loading">Loading...</div>;
+  }
+
+  return (
+    <div className="App">
+      <header className="App-header">
+        <h1>${templateName}</h1>
+        <p>React Frontend</p>
+      </header>
+      <main className="App-main">
+        <div className="dashboard">
+          <h2>Status</h2>
+          {data ? (
+            <div className="status">
+              <p>Status: {data.status}</p>
+              <p>Last updated: {new Date(data.lastUpdate).toLocaleString()}</p>
+            </div>
+          ) : (
+            <p>No data available</p>
+          )}
+        </div>
+      </main>
+    </div>
+  );
+}
+
+export default App;`);
+  
+  await fs.writeFile(path.join(frontendPath, 'src', 'index.css'), `body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.App {
+  text-align: center;
+}
+
+.App-header {
+  background-color: #282c34;
+  padding: 20px;
+  color: white;
+}
+
+.App-main {
+  padding: 20px;
+}
+
+.dashboard {
+  max-width: 800px;
+  margin: 0 auto;
+  text-align: left;
+}
+
+.loading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  font-size: 18px;
+}
+
+.status {
+  background: #f0f0f0;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 20px;
+  margin: 20px 0;
+}`);
+  
+  await fs.writeFile(path.join(frontendPath, 'vite.config.js'), `import { defineConfig } from 'vite';
+import react from '@vitejs/plugin-react';
+
+export default defineConfig({
+  plugins: [react()],
+  server: {
+    proxy: {
+      '/api': {
+        target: 'http://localhost:3000',
+        changeOrigin: true,
+      },
+    },
+  },
+});`);
+}
+
+async function addNextJsFrontend(projectPath, templateName) {
+  // Create Next.js frontend structure
+  const frontendPath = path.join(projectPath, 'frontend');
+  await fs.ensureDir(frontendPath);
+  
+  // Create Next.js app files
+  await fs.writeFile(path.join(frontendPath, 'package.json'), JSON.stringify({
+    name: `${templateName}-frontend`,
+    version: "1.0.0",
+    scripts: {
+      dev: "next dev",
+      build: "next build",
+      start: "next start",
+      lint: "next lint"
+    },
+    dependencies: {
+      react: "^18.2.0",
+      "react-dom": "^18.2.0",
+      next: "^14.0.0",
+      axios: "^1.6.0"
+    },
+    devDependencies: {
+      "@types/node": "^20.0.0",
+      "@types/react": "^18.2.0",
+      "@types/react-dom": "^18.2.0",
+      eslint: "^8.0.0",
+      "eslint-config-next": "^14.0.0"
+    }
+  }, null, 2));
+  
+  await fs.ensureDir(path.join(frontendPath, 'app'));
+  await fs.writeFile(path.join(frontendPath, 'app', 'layout.jsx'), `import './globals.css';
+
+export default function RootLayout({ children }) {
+  return (
+    <html lang="en">
+      <body>{children}</body>
+    </html>
+  );
+}`);
+  
+  await fs.writeFile(path.join(frontendPath, 'app', 'page.jsx'), `import { useState, useEffect } from 'react';
+
+export default function Home() {
+  const [data, setData] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    // Connect to your backend API
+    fetch('http://localhost:3000/api/status')
+      .then(response => response.json())
+      .then(data => {
+        setData(data);
+        setLoading(false);
+      })
+      .catch(error => {
+        console.error('Error fetching data:', error);
+        setLoading(false);
+      });
+  }, []);
+
+  if (loading) {
+    return <div className="loading">Loading...</div>;
+  }
+
+  return (
+    <div className="container">
+      <main className="main">
+        <h1>${templateName}</h1>
+        <p>Next.js Frontend</p>
+        
+        <div className="dashboard">
+          <h2>Status</h2>
+          {data ? (
+            <div className="status">
+              <p>Status: {data.status}</p>
+              <p>Last updated: {new Date(data.lastUpdate).toLocaleString()}</p>
+            </div>
+          ) : (
+            <p>No data available</p>
+          )}
+        </div>
+      </main>
+    </div>
+  );
+}`);
+  
+  await fs.writeFile(path.join(frontendPath, 'app', 'globals.css'), `body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.main {
+  min-height: 100vh;
+}
+
+.dashboard {
+  background: #f8f9fa;
+  border: 1px solid #e1e4e8;
+  border-radius: 8px;
+  padding: 30px;
+  margin: 20px 0;
+}
+
+.loading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  font-size: 18px;
+}`);
+  
+  await fs.writeFile(path.join(frontendPath, 'next.config.js'), `/** @type {import('next').NextConfig} */
+const nextConfig = {
+  async rewrites() {
+    return [
+      {
+        source: '/api/:path*',
+        destination: 'http://localhost:3000/api/:path*',
+      },
+    ];
+  },
+};
+
+module.exports = nextConfig;`);
+}
+
 async function generateTutorials(projectPath, answers) {
   const templateName = answers.template || 'trading-bot';
+  const frontend = answers.frontend || 'none';
   const tutorialContent = `#!/usr/bin/env node
 
 import chalk from 'chalk';
@@ -333,6 +688,7 @@ const __dirname = path.dirname(__filename);
 console.log(chalk.blue.bold(\`
 🎓 Welcome to your ${templateName} tutorial!
 🚀 Let's build a production-ready crypto application together
+\${frontend !== 'none' ? \`\\n🎨 Frontend: \${frontend === 'react' ? 'React with Vite' : 'Next.js'}\` : ''}
 \`));
 
 // Tutorial content for each template
@@ -348,7 +704,11 @@ const tutorialSteps = {
     '🔔 Set up price alerts',
     '⚡ Implement DCA strategy',
     '🛡️ Configure risk management',
-    '📈 Monitor performance metrics'
+    '📈 Monitor performance metrics'${frontend !== 'none' ? `
+    '🎨 Set up your ${frontend === 'react' ? 'React' : 'Next.js'} frontend',
+    '🔗 Connect frontend to backend API',
+    '📱 Build responsive dashboard',
+    '🚀 Deploy your full-stack app'` : ''}
   ],
   'token-launcher': [
     '⚙️ Set up your API key and environment',
