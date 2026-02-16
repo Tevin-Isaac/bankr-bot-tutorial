@@ -44,7 +44,22 @@ The CLI will guide you through:
 5. **Language Preference**: TypeScript or JavaScript
 6. **Git Initialization**: Optional git repository setup
 
-## 📋 Available Templates
+## 🎯 Available Templates
+
+Choose from **10 production-ready templates**:
+
+| Template | Description | Use Case |
+|----------|-------------|----------|
+| 🤖 **Trading Bot** | Automated trading with limit orders, DCA, and portfolio management | Active trading |
+| 🪙 **Token Launcher** | Deploy and manage your own tokens with vesting and fees | Token creation |
+| � **Portfolio Tracker** | Monitor and analyze your crypto portfolio across chains | Portfolio management |
+| ⚡ **Arbitrage Bot** | Find and execute profitable arbitrage opportunities | Arbitrage trading |
+| 💰 **DeFi Yield Farm** | Automated yield farming and liquidity management | Yield farming |
+| 🔍 **NFT Marketplace** | Create and manage NFT trading platform | NFT trading |
+| 🌐 **Cross-Chain Bridge** | Build multi-chain asset bridge | Asset bridging |
+| 📈 **Analytics Dashboard** | Real-time crypto analytics and insights | Data analysis |
+| 🎮 **GameFi Platform** | Play-to-earn gaming with crypto rewards | Gaming |
+| 🏦 **DeFi Bank** | Complete decentralized banking solution | DeFi banking |
 
 ### 🤖 Trading Bot
 Automated trading with limit orders, DCA strategies, and portfolio management.

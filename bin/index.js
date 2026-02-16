@@ -56,6 +56,26 @@ async function main() {
         {
           name: '💰 DeFi Yield Farm - Automated yield farming and liquidity management',
           value: 'defi-yield-farm'
+        },
+        {
+          name: '🔍 NFT Marketplace - Create and manage NFT trading platform',
+          value: 'nft-marketplace'
+        },
+        {
+          name: '🌐 Cross-Chain Bridge - Build multi-chain asset bridge',
+          value: 'cross-chain-bridge'
+        },
+        {
+          name: '📈 Analytics Dashboard - Real-time crypto analytics and insights',
+          value: 'analytics-dashboard'
+        },
+        {
+          name: '🎮 GameFi Platform - Play-to-earn gaming with crypto rewards',
+          value: 'gamefi-platform'
+        },
+        {
+          name: '🏦 DeFi Bank - Complete decentralized banking solution',
+          value: 'defi-bank'
         }
       ]
     },
@@ -381,6 +401,71 @@ const tutorialSteps = {
     '📈 Track APY and returns',
     '🛡️ Configure security measures',
     '🚀 Scale farming operations'
+  ],
+  'nft-marketplace': [
+    '⚙️ Set up your API key and environment',
+    '🧪 Test your Bankr API connection',
+    '🎨 Configure NFT metadata standards',
+    '🖼️ Set up NFT minting interface',
+    '🏪 Create marketplace listing system',
+    '💰 Configure trading and bidding',
+    '🔐 Set up royalty management',
+    '📊 Create analytics dashboard',
+    '🌐 Integrate with IPFS storage',
+    '🎯 Set up rarity calculation',
+    '🚀 Launch marketplace'
+  ],
+  'cross-chain-bridge': [
+    '⚙️ Set up your API key and environment',
+    '🧪 Test your Bankr API connection',
+    '🌐 Configure supported blockchains',
+    '🔗 Set up bridge contracts',
+    '💰 Configure fee structure',
+    '🔐 Implement security validation',
+    '📊 Create monitoring dashboard',
+    '⚡ Optimize bridge routing',
+    '🛡️ Set up slippage protection',
+    '📈 Track bridge volume',
+    '🚀 Launch bridge service'
+  ],
+  'analytics-dashboard': [
+    '⚙️ Set up your API key and environment',
+    '🧪 Test your Bankr API connection',
+    '📊 Configure data sources',
+    '📈 Set up real-time charts',
+    '🔍 Create filtering and search',
+    '📱 Configure responsive design',
+    '🔔 Set up custom alerts',
+    '📊 Create reporting system',
+    '🌐 Add API integration',
+    '📈 Implement advanced analytics',
+    '🚀 Deploy dashboard'
+  ],
+  'gamefi-platform': [
+    '⚙️ Set up your API key and environment',
+    '🧪 Test your Bankr API connection',
+    '🎮 Design game mechanics',
+    '💰 Configure reward system',
+    '🏆 Set up leaderboard',
+    '🔐 Implement wallet integration',
+    '🎨 Create NFT assets system',
+    '📊 Configure analytics tracking',
+    '🌐 Set up multiplayer features',
+    '🎯 Balance game economy',
+    '🚀 Launch game platform'
+  ],
+  'defi-bank': [
+    '⚙️ Set up your API key and environment',
+    '🧪 Test your Bankr API connection',
+    '🏦 Configure banking services',
+    '💰 Set up lending protocols',
+    '📊 Create interest calculation',
+    '🔐 Implement KYC/AML checks',
+    '💳 Configure debit card system',
+    '📈 Set up savings accounts',
+    '🔄 Create liquidity pools',
+    '📊 Generate financial reports',
+    '🚀 Launch DeFi bank'
   ]
 };
 
@@ -522,7 +607,7 @@ async function step2_ConnectionTest() {
 }
 
 async function step3_TemplateSpecific(templateName) {
-  console.log(chalk.blue('\\n⚙️ Step 3: Template Configuration'));
+  console.log(chalk.blue('\n⚙️ Step 3: Template Configuration'));
   
   switch (templateName) {
     case 'trading-bot':
@@ -550,6 +635,31 @@ async function step3_TemplateSpecific(templateName) {
       console.log(chalk.cyan('💰 Configuring farming strategies...'));
       console.log(chalk.cyan('⚙️ Setting up auto-compounding...'));
       break;
+    case 'nft-marketplace':
+      console.log(chalk.cyan('🎨 Configuring NFT standards...'));
+      console.log(chalk.cyan('🖼️ Setting up minting interface...'));
+      console.log(chalk.cyan('🏪 Creating marketplace system...'));
+      break;
+    case 'cross-chain-bridge':
+      console.log(chalk.cyan('🌐 Configuring multi-chain support...'));
+      console.log(chalk.cyan('🔗 Setting up bridge contracts...'));
+      console.log(chalk.cyan('💰 Configuring fee structure...'));
+      break;
+    case 'analytics-dashboard':
+      console.log(chalk.cyan('📊 Configuring data sources...'));
+      console.log(chalk.cyan('📈 Setting up real-time charts...'));
+      console.log(chalk.cyan('🔍 Configuring analytics engine...'));
+      break;
+    case 'gamefi-platform':
+      console.log(chalk.cyan('🎮 Configuring game mechanics...'));
+      console.log(chalk.cyan('💰 Setting up reward system...'));
+      console.log(chalk.cyan('🏆 Creating leaderboard system...'));
+      break;
+    case 'defi-bank':
+      console.log(chalk.cyan('🏦 Configuring banking services...'));
+      console.log(chalk.cyan('💰 Setting up lending protocols...'));
+      console.log(chalk.cyan('🔐 Implementing compliance checks...'));
+      break;
   }
   
   await new Promise(resolve => setTimeout(resolve, 2000));
@@ -557,7 +667,7 @@ async function step3_TemplateSpecific(templateName) {
 }
 
 async function step4_FirstAction(templateName) {
-  console.log(chalk.blue('\\n🚀 Step 4: First Action'));
+  console.log(chalk.blue('\n🚀 Step 4: First Action'));
   
   switch (templateName) {
     case 'trading-bot':
@@ -579,6 +689,26 @@ async function step4_FirstAction(templateName) {
     case 'defi-yield-farm':
       console.log(chalk.cyan('🌾 Analyzing yield opportunities...'));
       console.log(chalk.cyan('💰 Calculating potential APY...'));
+      break;
+    case 'nft-marketplace':
+      console.log(chalk.cyan('🎨 Creating NFT collection...'));
+      console.log(chalk.cyan('🖼️ Setting up metadata standards...'));
+      break;
+    case 'cross-chain-bridge':
+      console.log(chalk.cyan('🌐 Initializing bridge contracts...'));
+      console.log(chalk.cyan('🔗 Connecting to multiple chains...'));
+      break;
+    case 'analytics-dashboard':
+      console.log(chalk.cyan('📊 Connecting to data sources...'));
+      console.log(chalk.cyan('📈 Initializing analytics engine...'));
+      break;
+    case 'gamefi-platform':
+      console.log(chalk.cyan('🎮 Initializing game engine...'));
+      console.log(chalk.cyan('💰 Setting up reward system...'));
+      break;
+    case 'defi-bank':
+      console.log(chalk.cyan('🏦 Setting up banking infrastructure...'));
+      console.log(chalk.cyan('💰 Initializing lending protocols...'));
       break;
   }
   

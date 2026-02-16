@@ -1,0 +1,11 @@
+export const config = {
+  DEFAULT_CHAIN: 'base',
+  MARKETPLACE_FEE_PERCENTAGE: 2.5,
+  ROYALTY_PERCENTAGE: 10,
+  MAX_FILE_SIZE_MB: 50,
+  SUPPORTED_FORMATS: ['jpg', 'png', 'gif', 'webp'],
+  IPFS_GATEWAY: 'https://ipfs.io/ipfs/',
+  MIN_BID_INCREMENT: 0.01,
+  AUCTION_DURATION_HOURS: 24,
+  MAX_LISTINGS_PER_USER: 100
+};
