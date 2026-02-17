@@ -1,0 +1,24 @@
+[package]
+name = "@bankr/rust-crypto"
+version = "1.0.0"
+edition = "2021"
+description = "High-performance cryptographic operations for Bankr"
+license = "MIT"
+authors = ["Bankr Team"]
+
+[lib]
+crate-type = ["cdylib", "rlib"]
+
+[dependencies]
+wasm-bindgen = { workspace = true }
+ed25519-dalek = { workspace = true }
+sha2 = { workspace = true }
+hex = { workspace = true }
+serde = { workspace = true }
+anyhow = { workspace = true }
+
+[dependencies.web-sys]
+version = { workspace = true }
+features = [
+  "console",
+]

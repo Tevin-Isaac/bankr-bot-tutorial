@@ -1,12 +1,12 @@
 #!/usr/bin/env node
 
 import chalk from 'chalk';
-import { NFTMarketplace } from './nft-marketplace';
-import { config } from './config';
+import NFTMarketplace from './nft-marketplace.js';
+import { config } from './config.js';
 
 console.log(chalk.blue.bold(`
-🎨 NFT Marketplace Starting
-🚀 Launching your NFT trading platform
+🚀 Starting analytics-dashboard
+🤖 Launching your Bankr application
 `));
 
 async function main() {
@@ -26,13 +26,20 @@ async function main() {
     console.log(chalk.cyan('🚀 Starting NFT marketplace...'));
     await marketplace.start();
     
-  } catch (error: any) {
+    // Example usage
+    console.log(chalk.yellow('\n📋 Example operations:'));
+    console.log(chalk.cyan('await marketplace.mintNFT({ name: "My NFT", description: "..." });'));
+    console.log(chalk.cyan('await marketplace.listNFT("token123", { price: "0.1", currency: "ETH" });'));
+    console.log(chalk.cyan('await marketplace.getNFTPrice("collection-address");'));
+    console.log(chalk.cyan('await marketplace.getCollectionStats("collection-address");'));
+    
+  } catch (error) {
     console.error(chalk.red('❌ Error starting NFT marketplace:'), error.message);
     
-    if (error.message.includes('API key')) {
+    if (error.message.includes('API key') || error.message.includes('PRIVATE_KEY')) {
       console.log(chalk.yellow('\n💡 Setup Help:'));
-      console.log(chalk.cyan('1. Get your API key from https://bankr.bot/api'));
-      console.log(chalk.cyan('2. Add it to your .env file as BANKR_API_KEY'));
+      console.log(chalk.cyan('1. Run: bankr login email user@example.com'));
+      console.log(chalk.cyan('2. Or add BANKR_PRIVATE_KEY to your .env file'));
       console.log(chalk.cyan('3. Run npm test to verify your setup'));
     }
     

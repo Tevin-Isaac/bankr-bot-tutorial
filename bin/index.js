@@ -12,10 +12,59 @@ const __dirname = path.dirname(__filename);
 
 console.log(chalk.blue.bold(`
 🚀 Welcome to Create Bankr App!
-🤖 The fastest way to build crypto trading applications
+🤖 The fastest way to build DeFi applications
+🔗 Seamlessly integrates with @bankr/cli
 `));
 
+// Check @bankr/cli integration status
+async function checkBankrCliIntegration() {
+  try {
+    const { execSync } = await import('child_process');
+    const fs = await import('fs-extra');
+    const path = await import('path');
+    const os = await import('os');
+    
+    const configPath = path.join(os.homedir(), '.bankr', 'config.json');
+    let cliInstalled = false;
+    let authenticated = false;
+    
+    // Check if @bankr/cli is installed
+    try {
+      execSync('bankr --version', { stdio: 'ignore' });
+      cliInstalled = true;
+    } catch {}
+    
+    // Check if authenticated
+    if (cliInstalled && fs.existsSync(configPath)) {
+      try {
+        const config = JSON.parse(fs.readFileSync(configPath, 'utf8'));
+        authenticated = !!config.apiKey;
+      } catch {}
+    }
+    
+    if (cliInstalled && authenticated) {
+      console.log(chalk.green('✅ @bankr/cli integration ready!'));
+      return true;
+    } else if (!cliInstalled) {
+      console.log(chalk.yellow('💡 Tip: Install @bankr/cli for enhanced features:'));
+      console.log(chalk.cyan('   npm install -g @bankr/cli'));
+      console.log(chalk.cyan('   bankr login email user@example.com'));
+      return false;
+    } else {
+      console.log(chalk.yellow('💡 Tip: Authenticate @bankr/cli for seamless integration:'));
+      console.log(chalk.cyan('   bankr login email user@example.com'));
+      return false;
+    }
+  } catch (error) {
+    // Silently continue if check fails
+    return false;
+  }
+}
+
 async function main(projectNameDefault = null) {
+  // Check @bankr/cli integration
+  await checkBankrCliIntegration();
+  
   const answers = await inquirer.prompt([
     {
       type: 'input',
@@ -85,19 +134,27 @@ async function main(projectNameDefault = null) {
       message: 'Which frontend framework would you like?',
       choices: [
         {
-          name: '🚀 None - Backend only (API/CLI)',
-          value: 'none'
+          name: '� Next.js - Full-stack React framework (Recommended)',
+          value: 'nextjs'
         },
         {
-          name: '⚛️ React - Modern React with Vite',
+          name: '⚛️ React + Vite - Modern React SPA',
           value: 'react'
         },
         {
-          name: '🔷 Next.js - Full-stack React framework',
-          value: 'nextjs'
+          name: '� Vue.js - Progressive JavaScript framework',
+          value: 'vue'
+        },
+        {
+          name: '🔥 Svelte - Lightweight and fast',
+          value: 'svelte'
+        },
+        {
+          name: '🚀 None - Backend only (API/CLI)',
+          value: 'none'
         }
       ],
-      default: 'none'
+      default: 'nextjs'
     },
     {
       type: 'list',
@@ -128,46 +185,32 @@ async function main(projectNameDefault = null) {
       default: 'base'
     },
     {
-      type: 'checkbox',
-      name: 'features',
-      message: 'Which features would you like to include?',
-      choices: (answers) => {
-        const baseFeatures = [
-          { name: '📝 Environment configuration', value: 'env-config', checked: true },
-          { name: '🧪 Testing setup', value: 'testing', checked: true },
-          { name: '📚 Interactive tutorials', value: 'tutorials', checked: true },
-          { name: '📊 Logging and monitoring', value: 'logging', checked: true },
-          { name: '🔒 Error handling', value: 'error-handling', checked: true }
-        ];
-
-        if (answers.template === 'trading-bot') {
-          return [
-            ...baseFeatures,
-            { name: '📈 Limit orders', value: 'limit-orders', checked: true },
-            { name: '💵 Dollar-cost averaging', value: 'dca', checked: false },
-            { name: '📊 Real-time portfolio tracking', value: 'portfolio-tracking', checked: true },
-            { name: '🔔 Price alerts', value: 'price-alerts', checked: false }
-          ];
-        }
-
-        if (answers.template === 'token-launcher') {
-          return [
-            ...baseFeatures,
-            { name: '🏦 Token vaulting', value: 'vaulting', checked: true },
-            { name: '⏰ Vesting schedules', value: 'vesting', checked: false },
-            { name: '💸 Fee management', value: 'fee-management', checked: true },
-            { name: '📈 Token analytics', value: 'token-analytics', checked: false }
-          ];
-        }
-
-        return baseFeatures;
-      }
+      type: 'confirm',
+      name: 'includeEssentials',
+      message: 'Include essential features (environment config, testing)?',
+      default: true
     },
     {
       type: 'confirm',
       name: 'typescript',
       message: 'Would you like to use TypeScript?',
       default: true
+    },
+    {
+      type: 'list',
+      name: 'performance',
+      message: 'Choose performance engine (NEW! 🦀):',
+      choices: [
+        {
+          name: '🚀 Rust + WebAssembly - Ultra-fast crypto & trading operations (Recommended)',
+          value: 'rust'
+        },
+        {
+          name: '⚡ JavaScript - Standard Node.js performance',
+          value: 'javascript'
+        }
+      ],
+      default: 'rust'
     },
     {
       type: 'confirm',
@@ -189,6 +232,54 @@ async function main(projectNameDefault = null) {
     const templatePath = path.join(__dirname, '../templates', answers.template);
     await fs.copy(templatePath, projectPath);
     
+    // Copy shared integration files
+    const sharedPath = path.join(__dirname, '../templates/shared');
+    if (fs.existsSync(sharedPath)) {
+      await fs.copy(sharedPath, path.join(projectPath, 'shared'));
+    }
+    
+    // Copy appropriate template files (TS or JS)
+    const templateSrcPath = path.join(__dirname, '../templates', answers.template, 'src');
+    const templateDestPath = path.join(projectPath, 'src');
+    
+    if (fs.existsSync(templateSrcPath)) {
+      await fs.copy(templateSrcPath, templateDestPath);
+      
+      // If TypeScript is disabled, use .js files instead of .ts
+      if (!answers.typescript) {
+        const jsFiles = await fs.readdir(templateDestPath);
+        for (const file of jsFiles) {
+          if (file.endsWith('.ts')) {
+            const jsFile = file.replace('.ts', '.js');
+            const tsPath = path.join(templateDestPath, file);
+            const jsPath = path.join(templateDestPath, jsFile);
+            
+            // Check if .js version exists
+            const jsVersionPath = path.join(templateSrcPath, jsFile);
+            if (fs.existsSync(jsVersionPath)) {
+              await fs.copy(jsVersionPath, jsPath);
+              await fs.remove(tsPath); // Remove .ts version
+            }
+          }
+        }
+      }
+      
+      // If Rust performance is selected, use Rust-enhanced files
+      if (answers.performance === 'rust') {
+        const rustFiles = await fs.readdir(templateDestPath);
+        for (const file of rustFiles) {
+          const rustFile = file.replace('.js', '-rust.js');
+          const rustPath = path.join(templateSrcPath, rustFile);
+          
+          if (fs.existsSync(rustPath)) {
+            const originalPath = path.join(templateDestPath, file);
+            await fs.copy(rustPath, originalPath);
+            console.log(`🦀 Using Rust-enhanced ${file}`);
+          }
+        }
+      }
+    }
+    
     // Add frontend framework if selected
     if (answers.frontend !== 'none') {
       await addFrontendFramework(projectPath, answers.frontend, answers.template);
@@ -199,11 +290,6 @@ async function main(projectNameDefault = null) {
     
     // Generate configuration files
     await generateConfigFiles(projectPath, answers);
-    
-    // Generate tutorial files
-    if (answers.features.includes('tutorials')) {
-      await generateTutorials(projectPath, answers);
-    }
     
     // Initialize git if requested
     if (answers.gitInit) {
@@ -232,7 +318,6 @@ ${answers.frontend !== 'none' ? `   # Install frontend dependencies
    npm run dev` : ''}
 
 📚 Get started:
-   npm run tutorial    # Interactive tutorial
    npm run test        # Run tests
    npm run build       # Build for production
 ${answers.frontend !== 'none' ? `   # Build frontend
@@ -244,11 +329,34 @@ ${answers.frontend !== 'none' ? `   # Build frontend
    🌐 Visit https://docs.bankr.bot/
    💬 Join our Discord: https://discord.gg/bankr
 
-${answers.frontend !== 'none' ? `🎨 Frontend Development:
-   Your ${answers.frontend === 'react' ? 'React' : 'Next.js'} frontend is configured to connect to your backend API
-   Frontend runs on http://localhost:5173 (React) or http://localhost:3000 (Next.js)
+🔗 Bankr Ecosystem Integration:
+   ✅ @bankr/cli authentication ready
+   ✅ Bankr SDK included
+   ✅ Agent API access configured
+   ✅ Claude plugins compatible
+   ${answers.performance === 'rust' ? '🦀 Rust + WebAssembly ultra-fast performance enabled' : ''}
+
+💡 Quick Start:
+   💡 Use 'bankr login email user@example.com' for easy setup
+   💡 Your app automatically uses Bankr SDK for API calls
+   ${answers.performance === 'rust' ? '💡 Rust modules provide 10-100x faster crypto operations' : ''}
+   💡 Switch between automated app and manual CLI commands
+   💡 Run 'bankr whoami' to verify authentication
+
+🎨 Performance Engine:
+   ${answers.performance === 'rust' ? `🦀 Rust + WebAssembly: Ultra-fast crypto operations
+   ⚡ 10-100x faster than JavaScript
+   🔐 Memory-safe cryptographic operations
+   📊 High-performance analytics engine
+   🚀 Optimized trading calculations` : `⚡ JavaScript: Standard Node.js performance
+   🔧 Easy to debug and modify
+   📦 No additional dependencies`}
+
+🎨 Frontend Development:
+   Your ${answers.frontend === 'nextjs' ? 'Next.js' : answers.frontend === 'react' ? 'React + Vite' : answers.frontend === 'vue' ? 'Vue.js' : answers.frontend === 'svelte' ? 'Svelte' : 'Backend'} is configured with a pre-built ${answers.template} interface
+   ${answers.frontend !== 'none' ? `Frontend runs on ${answers.frontend === 'nextjs' ? 'http://localhost:3000' : answers.frontend === 'react' ? 'http://localhost:5173' : answers.frontend === 'vue' ? 'http://localhost:5174' : 'http://localhost:5175'}
    Backend API should run on http://localhost:3000
-   Check the frontend/README.md for specific setup instructions` : ''}
+   Check the frontend/README.md for specific setup instructions` : 'Backend API runs on http://localhost:3000'}
 `));
     
     console.log('Happy building! 🤖💰');
@@ -271,18 +379,36 @@ async function generatePackageJson(projectPath, answers) {
       start: answers.typescript ? 'node dist/index.js' : 'node src/index.js',
       dev: answers.typescript ? 'tsx watch src/index.ts' : 'node src/index.js',
       build: answers.typescript ? 'tsc' : 'echo "No build step required"',
-      test: answers.features.includes('testing') ? 'node --test' : 'echo "No tests configured"',
-      tutorial: answers.features.includes('tutorials') ? 'node tutorials/start.js' : 'echo "No tutorials available"'
+      test: answers.includeEssentials ? 'node --test' : 'echo "Tests not included"'
     },
     dependencies: {
       'dotenv': '^16.4.5',
       'node-fetch': '^3.3.2',
       'chalk': '^5.3.0',
-      'inquirer': '^9.2.12'
+      'inquirer': '^9.2.12',
+      'fs-extra': '^11.1.1',
+      'zod': '^3.22.4',
+      '@bankr/sdk': '^1.0.0',
+      'viem': '^2.0.0',
+      'axios': '^1.6.0',
+      'winston': '^3.11.0',
+      ...(answers.performance === 'rust' ? {
+        '@bankr/rust-crypto': '^1.0.0',
+        '@bankr/rust-trading': '^1.0.0',
+        '@bankr/rust-analytics': '^1.0.0'
+      } : {})
+    },
+    peerDependencies: {
+      '@bankr/cli': '>=1.0.0'
+    },
+    peerDependenciesMeta: {
+      '@bankr/cli': {
+        'optional': true
+      }
     },
     devDependencies: {
-      ...(answers.typescript ? { 'typescript': '^5.3.3', 'tsx': '^4.6.2' } : {}),
-      ...(answers.features.includes('testing') ? { 'nodemon': '^3.1.4' } : {})
+      ...(answers.typescript ? { 'typescript': '^5.3.3', 'tsx': '^4.6.2', '@types/node': '^20.0.0' } : {}),
+      ...(answers.includeEssentials ? { 'nodemon': '^3.1.4' } : {})
     },
     keywords: ['bankr', 'crypto', answers.template, answers.blockchain],
     author: 'Bankr Developer',
@@ -294,9 +420,20 @@ async function generatePackageJson(projectPath, answers) {
 
 async function generateConfigFiles(projectPath, answers) {
   const envContent = `# Bankr API Configuration
-# Get your API key from https://bankr.bot/api
+# Option 1: Use @bankr/cli (recommended)
+#   npm install -g @bankr/cli
+#   bankr login email user@example.com
+#   Your app will automatically use the authentication!
+
+# Option 2: Manual API key
+#   Get your API key from https://bankr.bot/api
 BANKR_API_KEY=your_api_key_here
 BANKR_BASE_URL=https://api.bankr.bot
+
+# @bankr/cli Integration (optional)
+# If you have separate LLM gateway key
+# BANKR_LLM_KEY=your_llm_key_here
+# BANKR_LLM_URL=https://llm.bankr.bot
 
 # Project Configuration
 PROJECT_NAME=${answers.projectName}

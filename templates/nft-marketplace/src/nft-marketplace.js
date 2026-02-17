@@ -1,13 +1,8 @@
 import { BankrClient } from '@bankr/sdk';
 import { createConfig } from '../shared/enhanced-config.js';
-import type { NFTMetadata, ListingOptions, MintResult, ListingResult } from '../shared/types.js';
 
 export default class NFTMarketplace {
-  private config: ReturnType<typeof createConfig>;
-  private client: BankrClient;
-  private initialized: boolean = false;
-
-  constructor(config: ReturnType<typeof createConfig>) {
+  constructor(config) {
     this.config = config;
     
     // Initialize SDK client with private key from environment
@@ -16,12 +11,14 @@ export default class NFTMarketplace {
     }
     
     this.client = new BankrClient({
-      privateKey: process.env.BANKR_PRIVATE_KEY as `0x${string}`,
+      privateKey: process.env.BANKR_PRIVATE_KEY,
       baseUrl: this.config.BANKR_BASE_URL
     });
+    
+    this.initialized = false;
   }
 
-  async initialize(): Promise<void> {
+  async initialize() {
     console.log('🎨 Initializing NFT marketplace with Bankr SDK...');
     
     try {
@@ -37,12 +34,12 @@ export default class NFTMarketplace {
     }
   }
 
-  async start(): Promise<void> {
+  async start() {
     console.log('🚀 NFT marketplace started with real SDK integration');
     console.log('💡 Ready to mint real NFTs and manage marketplace operations');
   }
 
-  async mintNFT(metadata: NFTMetadata): Promise<MintResult> {
+  async mintNFT(metadata) {
     if (!this.initialized) {
       throw new Error('NFT marketplace not initialized. Call initialize() first.');
     }
@@ -79,7 +76,7 @@ export default class NFTMarketplace {
     }
   }
 
-  async listNFT(tokenId: string, options: ListingOptions): Promise<ListingResult> {
+  async listNFT(tokenId, options) {
     if (!this.initialized) {
       throw new Error('NFT marketplace not initialized. Call initialize() first.');
     }
@@ -112,7 +109,7 @@ export default class NFTMarketplace {
     }
   }
 
-  async getNFTPrice(tokenId: string): Promise<string> {
+  async getNFTPrice(tokenId) {
     if (!this.initialized) {
       throw new Error('NFT marketplace not initialized. Call initialize() first.');
     }
@@ -131,7 +128,7 @@ export default class NFTMarketplace {
     }
   }
 
-  async getCollectionStats(collectionAddress: string): Promise<any> {
+  async getCollectionStats(collectionAddress) {
     if (!this.initialized) {
       throw new Error('NFT marketplace not initialized. Call initialize() first.');
     }

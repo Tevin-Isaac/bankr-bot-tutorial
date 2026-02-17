@@ -1,0 +1,23 @@
+[package]
+name = "@bankr/rust-analytics"
+version = "1.0.0"
+edition = "2021"
+description = "High-performance analytics engine for Bankr"
+license = "MIT"
+authors = ["Bankr Team"]
+
+[lib]
+crate-type = ["cdylib", "rlib"]
+
+[dependencies]
+wasm-bindgen = { workspace = true }
+serde = { workspace = true }
+serde-wasm-bindgen = { workspace = true }
+anyhow = { workspace = true }
+tokio = { workspace = true }
+
+[dependencies.web-sys]
+version = { workspace = true }
+features = [
+    "console",
+]
