@@ -247,6 +247,18 @@ npm run build
 - EVM compatible
 - Good for beginners
 
+### **🟠 SOLANA**
+- High-speed transactions
+- Low gas fees
+- Different architecture (non-EVM)
+- Growing DeFi ecosystem
+
+### **🦄 UNICHAIN**
+- Uniswap's native L2
+- Deep liquidity
+- EVM compatible
+- Optimized for DeFi
+
 ## 🛠 DEVELOPMENT FEATURES
 
 ### **🔧 CONFIGURATION:**
@@ -315,7 +327,7 @@ npm run build
 ### **🚀 GROWTH METRICS:**
 - **Templates:** 7 production-ready templates
 - **Frontend:** 4 framework options
-- **Blockchain:** 3 chain support
+- **Blockchain:** 4 chain support
 - **Performance:** 2 engine options (Rust + JavaScript)
 - **Dependencies:** 50+ optimized packages
 - **Zero Dependencies:** All packages published to npm
