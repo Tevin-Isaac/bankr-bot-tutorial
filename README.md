@@ -334,17 +334,8 @@ npm run build
 
 ## 🤝 CONTRIBUTING
 
-### **🔧 DEVELOPMENT SETUP:**
-```bash
-# Clone repository
-git clone https://github.com/bankr/create-bankr-app
-
-# Install dependencies
-npm install
-
-# Run tests
-npm test
-
-# Start development
-npm run dev
-**Ready for production deployment!** 🎉
+1. Fork the repository
+2. Create your feature branch
+3. Commit your changes
+4. Push to the branch
+5. Create a Pull Request
