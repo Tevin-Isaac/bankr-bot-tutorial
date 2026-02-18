@@ -1,6 +1,6 @@
 {
   "name": "create-bankr-app",
-  "version": "2.3.1",
+  "version": "2.3.2",
   "description": "Interactive CLI tool to create Bankr applications with ultra-fast Rust + WebAssembly performance",
   "main": "bin/index.js",
   "bin": {
