@@ -1,5 +1,5 @@
 [package]
-name = "@bankr/rust-crypto"
+name = "bankr-rust-crypto"
 version = "1.0.0"
 edition = "2021"
 description = "High-performance cryptographic operations for Bankr"
@@ -10,15 +10,15 @@ authors = ["Bankr Team"]
 crate-type = ["cdylib", "rlib"]
 
 [dependencies]
-wasm-bindgen = { workspace = true }
-ed25519-dalek = { workspace = true }
-sha2 = { workspace = true }
-hex = { workspace = true }
-serde = { workspace = true }
-anyhow = { workspace = true }
+wasm-bindgen = "0.2"
+ed25519-dalek = "2.0"
+sha2 = "0.10"
+hex = "0.4"
+serde = { version = "1.0", features = ["derive"] }
+anyhow = "1.0"
 
 [dependencies.web-sys]
-version = { workspace = true }
+version = "0.3"
 features = [
   "console",
 ]

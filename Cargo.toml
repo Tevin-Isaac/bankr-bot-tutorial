@@ -2,8 +2,7 @@
 members = [
     "crates/bankr-crypto",
     "crates/bankr-trading", 
-    "crates/bankr-analytics",
-    "crates/bankr-wasm"
+    "crates/bankr-analytics"
 ]
 resolver = "2"
 

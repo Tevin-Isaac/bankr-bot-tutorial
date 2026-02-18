@@ -1,195 +1,115 @@
 use wasm_bindgen::prelude::*;
-use serde::{Deserialize, Serialize};
-use std::collections::HashMap;
+use sha2::{Sha256, Digest};
+use hex;
 
 // High-performance trading engine for Bankr
-#[derive(Debug, Clone, Serialize, Deserialize)]
-#[wasm_bindgen]
-pub struct TradeParams {
-    pub token_in: String,
-    pub token_out: String,
-    pub amount_in: String,
-    pub slippage: f64,
-    pub deadline: u64,
-}
-
-#[derive(Debug, Clone, Serialize, Deserialize)]
-#[wasm_bindgen]
-pub struct TradeResult {
-    pub success: bool,
-    pub amount_out: String,
-    pub price: String,
-    pub gas_estimate: String,
-    pub transaction_data: String,
-}
-
-#[derive(Debug, Clone, Serialize, Deserialize)]
-#[wasm_bindgen]
-pub struct Position {
-    pub token: String,
-    pub amount: String,
-    pub value_usd: String,
-    pub pnl: String,
-}
-
 #[wasm_bindgen]
 pub struct TradingEngine {
-    positions: HashMap<String, Position>,
-    gas_prices: HashMap<String, f64>,
+    initialized: bool,
 }
 
 #[wasm_bindgen]
 impl TradingEngine {
     #[wasm_bindgen(constructor)]
     pub fn new() -> TradingEngine {
-        console_error_panic_hook::set_once();
         TradingEngine {
-            positions: HashMap::new(),
-            gas_prices: HashMap::new(),
+            initialized: false,
         }
     }
 
     #[wasm_bindgen]
-    pub fn execute_trade(&mut self, params: &TradeParams) -> Result<TradeResult, JsValue> {
-        // High-performance trade execution logic
-        let amount_out = self.calculate_output_amount(&params.token_in, &params.token_out, &params.amount_in)?;
-        let gas_estimate = self.estimate_gas(&params.token_in, &params.token_out)?;
-        
-        let result = TradeResult {
-            success: true,
-            amount_out,
-            price: self.calculate_price(&params.token_in, &params.token_out)?,
-            gas_estimate,
-            transaction_data: self.build_transaction_data(params)?,
-        };
-        
-        Ok(result)
+    pub fn initialize(&mut self) -> String {
+        self.initialized = true;
+        "Rust trading engine initialized successfully".to_string()
+    }
+
+    #[wasm_bindgen]
+    pub fn execute_trade(&self, token_in: String, token_out: String, amount_in: String) -> JsValue {
+        if !self.initialized {
+            return JsValue::from_str("Trading engine not initialized");
+        }
+
+        let mut hasher = Sha256::new();
+        hasher.update(token_in.as_bytes());
+        hasher.update(token_out.as_bytes());
+        hasher.update(amount_in.as_bytes());
+        let trade_id = hex::encode(hasher.finalize());
+
+        // Simulate ultra-fast trade calculation
+        let gas_estimate = 21000 + (amount_in.len() * 100);
+        let amount_out = format!("{}.{}", (amount_in.parse::<f64>().unwrap_or(0.0) * 0.997), token_out);
+
+        let result = js_sys::Object::new();
+        js_sys::Reflect::set(
+            &result,
+            &JsValue::from_str("success"),
+            &JsValue::from_bool(true),
+        );
+        js_sys::Reflect::set(
+            &result,
+            &JsValue::from_str("tradeId"),
+            &JsValue::from_str(&trade_id),
+        );
+        js_sys::Reflect::set(
+            &result,
+            &JsValue::from_str("amountOut"),
+            &JsValue::from_str(&amount_out),
+        );
+        js_sys::Reflect::set(
+            &result,
+            &JsValue::from_str("gasEstimate"),
+            &JsValue::from_f64(gas_estimate as f64),
+        );
+        js_sys::Reflect::set(
+            &result,
+            &JsValue::from_str("slippage"),
+            &JsValue::from_str("0.3%"),
+        );
+
+        result.into()
     }
 
     #[wasm_bindgen]
     pub fn get_portfolio_value(&self) -> String {
-        let total_value: f64 = self.positions.values()
-            .map(|pos| pos.value_usd.parse::<f64>().unwrap_or(0.0))
-            .sum();
-        
-        total_value.to_string()
-    }
+        if !self.initialized {
+            return "Trading engine not initialized".to_string();
+        }
 
-    #[wasm_bindgen]
-    pub fn add_position(&mut self, token: &str, amount: &str, value_usd: &str) {
-        let position = Position {
-            token: token.to_string(),
-            amount: amount.to_string(),
-            value_usd: value_usd.to_string(),
-            pnl: "0.00".to_string(),
-        };
-        
-        self.positions.insert(token.to_string(), position);
+        // Simulate portfolio calculation
+        let portfolio_value = 100000.0; // $100k portfolio
+        let risk_score = 0.15; // 15% risk score
+
+        format!("Portfolio Value: ${:.2}, Risk Score: {:.2}%", portfolio_value, risk_score * 100.0)
     }
 
     #[wasm_bindgen]
     pub fn calculate_risk(&self) -> String {
-        let total_value: f64 = self.positions.values()
-            .map(|pos| pos.value_usd.parse::<f64>().unwrap_or(0.0))
-            .sum();
-        
-        // Simple risk calculation (can be enhanced)
-        let risk_score = if total_value > 10000.0 {
-            "HIGH"
-        } else if total_value > 1000.0 {
-            "MEDIUM"
-        } else {
-            "LOW"
-        };
-        
-        risk_score.to_string()
+        if !self.initialized {
+            return "Trading engine not initialized".to_string();
+        }
+
+        // Simulate risk calculation
+        let volatility = 0.25; // 25% volatility
+        let liquidity = 0.85; // 85% liquidity
+        let market_depth = 0.90; // 90% market depth
+
+        let risk_score = (volatility * 0.4) + ((1.0 - liquidity) * 0.3) + ((1.0 - market_depth) * 0.3);
+
+        format!("Risk Score: {:.2}% (Volatility: {:.1}%, Liquidity: {:.1}%, Depth: {:.1}%)", 
+                risk_score * 100.0, volatility * 100.0, liquidity * 100.0, market_depth * 100.0)
     }
 
     #[wasm_bindgen]
-    pub fn optimize_gas(&mut self, network: &str) -> String {
-        // Gas optimization logic
-        let optimal_gas = match network {
-            "ethereum" => "20",
-            "base" => "0.1",
-            "polygon" => "30",
-            _ => "20",
-        };
-        
-        optimal_gas.to_string()
+    pub fn optimize_gas(&self, complexity: i32) -> String {
+        if !self.initialized {
+            return "Trading engine not initialized".to_string();
+        }
+
+        // Simulate gas optimization
+        let base_gas = 21000;
+        let complexity_multiplier = 1.0 + (complexity as f64 * 0.1);
+        let optimized_gas = ((base_gas as f64) * complexity_multiplier) as i32;
+
+        format!("Optimized gas: {} units (complexity: {})", optimized_gas, complexity)
     }
-
-    // Private helper methods
-    fn calculate_output_amount(&self, token_in: &str, token_out: &str, amount_in: &str) -> Result<String, JsValue> {
-        let amount = amount_in.parse::<f64>()
-            .map_err(|_| JsValue::from_str("Invalid amount"))?;
-        
-        // Simplified calculation (in real implementation, use DEX data)
-        let output_amount = match (token_in, token_out) {
-            ("ETH", "USDC") => amount * 2000.0 * 0.997, // 0.3% fee
-            ("USDC", "ETH") => amount / 2000.0 * 0.997,
-            _ => amount * 0.997, // Default 0.3% fee
-        };
-        
-        Ok(format!("{:.6}", output_amount))
-    }
-
-    fn calculate_price(&self, token_in: &str, token_out: &str) -> Result<String, JsValue> {
-        let price = match (token_in, token_out) {
-            ("ETH", "USDC") => "2000.00",
-            ("USDC", "ETH") => "0.0005",
-            _ => "1.00",
-        };
-        
-        Ok(price.to_string())
-    }
-
-    fn estimate_gas(&self, token_in: &str, token_out: &str) -> Result<String, JsValue> {
-        let gas = match (token_in, token_out) {
-            ("ETH", _) => "21000",
-            (_, "ETH") => "50000",
-            _ => "100000",
-        };
-        
-        Ok(gas.to_string())
-    }
-
-    fn build_transaction_data(&self, params: &TradeParams) -> Result<String, JsValue> {
-        // Build transaction data (simplified)
-        let tx_data = format!(
-            "0x{}{}{}{}",
-            hex::encode(params.token_in.as_bytes()),
-            hex::encode(params.token_out.as_bytes()),
-            hex::encode(params.amount_in.as_bytes()),
-            hex::encode(params.slippage.to_string().as_bytes())
-        );
-        
-        Ok(tx_data)
-    }
-}
-
-// Utility functions for performance
-#[wasm_bindgen]
-pub fn calculate_slippage(amount_in: &str, amount_out: &str, expected_out: &str) -> f64 {
-    let in_val = amount_in.parse::<f64>().unwrap_or(0.0);
-    let out_val = amount_out.parse::<f64>().unwrap_or(0.0);
-    let expected_val = expected_out.parse::<f64>().unwrap_or(0.0);
-    
-    if expected_val == 0.0 {
-        return 0.0;
-    }
-    
-    ((expected_val - out_val) / expected_val) * 100.0
-}
-
-#[wasm_bindgen]
-pub fn format_amount(amount: &str, decimals: u8) -> String {
-    let value = amount.parse::<f64>().unwrap_or(0.0);
-    let divisor = 10_f64.powi(decimals as i32);
-    format!("{:.6}", value / divisor)
-}
-
-// Initialize console error panic hook for better debugging
-#[wasm_bindgen(start)]
-pub fn main() {
-    console_error_panic_hook::set_once();
 }

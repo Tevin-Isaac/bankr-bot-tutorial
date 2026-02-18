@@ -2,9 +2,9 @@ import { BankrClient } from '@bankr/sdk';
 import { createConfig } from '../shared/enhanced-config.js';
 
 // Import Rust WebAssembly modules for ultra-fast performance
-import init, { CryptoEngine } from '@bankr/rust-crypto';
-import initTrading, { TradingEngine } from '@bankr/rust-trading';
-import initAnalytics, { AnalyticsEngine } from '@bankr/rust-analytics';
+import init, { CryptoEngine } from 'bankr-rust-crypto';
+import initTrading, { TradingEngine } from 'bankr-rust-trading';
+import initAnalytics, { AnalyticsEngine } from 'bankr-rust-analytics';
 
 export default class TradingBot {
   constructor() {

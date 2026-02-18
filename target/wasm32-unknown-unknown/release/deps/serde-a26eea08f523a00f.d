@@ -1,0 +1,14 @@
+/home/tevin/CascadeProjects/create-bankr-app/target/wasm32-unknown-unknown/release/deps/serde-a26eea08f523a00f.d: /home/tevin/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde-1.0.228/src/lib.rs /home/tevin/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde-1.0.228/src/integer128.rs /home/tevin/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde-1.0.228/src/private/mod.rs /home/tevin/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde-1.0.228/src/private/de.rs /home/tevin/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde-1.0.228/src/private/ser.rs /home/tevin/CascadeProjects/create-bankr-app/target/wasm32-unknown-unknown/release/build/serde-70845d3edba7a84e/out/private.rs
+
+/home/tevin/CascadeProjects/create-bankr-app/target/wasm32-unknown-unknown/release/deps/libserde-a26eea08f523a00f.rlib: /home/tevin/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde-1.0.228/src/lib.rs /home/tevin/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde-1.0.228/src/integer128.rs /home/tevin/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde-1.0.228/src/private/mod.rs /home/tevin/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde-1.0.228/src/private/de.rs /home/tevin/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde-1.0.228/src/private/ser.rs /home/tevin/CascadeProjects/create-bankr-app/target/wasm32-unknown-unknown/release/build/serde-70845d3edba7a84e/out/private.rs
+
+/home/tevin/CascadeProjects/create-bankr-app/target/wasm32-unknown-unknown/release/deps/libserde-a26eea08f523a00f.rmeta: /home/tevin/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde-1.0.228/src/lib.rs /home/tevin/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde-1.0.228/src/integer128.rs /home/tevin/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde-1.0.228/src/private/mod.rs /home/tevin/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde-1.0.228/src/private/de.rs /home/tevin/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde-1.0.228/src/private/ser.rs /home/tevin/CascadeProjects/create-bankr-app/target/wasm32-unknown-unknown/release/build/serde-70845d3edba7a84e/out/private.rs
+
+/home/tevin/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde-1.0.228/src/lib.rs:
+/home/tevin/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde-1.0.228/src/integer128.rs:
+/home/tevin/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde-1.0.228/src/private/mod.rs:
+/home/tevin/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde-1.0.228/src/private/de.rs:
+/home/tevin/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde-1.0.228/src/private/ser.rs:
+/home/tevin/CascadeProjects/create-bankr-app/target/wasm32-unknown-unknown/release/build/serde-70845d3edba7a84e/out/private.rs:
+
+# env-dep:OUT_DIR=/home/tevin/CascadeProjects/create-bankr-app/target/wasm32-unknown-unknown/release/build/serde-70845d3edba7a84e/out

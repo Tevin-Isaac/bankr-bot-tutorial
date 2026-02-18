@@ -45,8 +45,10 @@ examples/test-*
 # Git repositories (embedded)
 examples/.git
 templates/*/.git
+crates/
 
 # Documentation (keep core files)
 CONTRIBUTING.md
 TEMPLATES.md
 PUBLISHING.md
+!README.md

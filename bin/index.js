@@ -388,14 +388,13 @@ async function generatePackageJson(projectPath, answers) {
       'inquirer': '^9.2.12',
       'fs-extra': '^11.1.1',
       'zod': '^3.22.4',
-      '@bankr/sdk': '^1.0.0',
       'viem': '^2.0.0',
       'axios': '^1.6.0',
       'winston': '^3.11.0',
       ...(answers.performance === 'rust' ? {
-        '@bankr/rust-crypto': '^1.0.0',
-        '@bankr/rust-trading': '^1.0.0',
-        '@bankr/rust-analytics': '^1.0.0'
+        'bankr-rust-crypto': '^1.0.0',
+        'bankr-rust-trading': '^1.0.0',
+        'bankr-rust-analytics': '^1.0.0'
       } : {})
     },
     peerDependencies: {

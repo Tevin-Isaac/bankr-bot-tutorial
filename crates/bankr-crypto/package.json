@@ -1,0 +1,28 @@
+{
+  "name": "@bankr/rust-crypto",
+  "version": "1.0.0",
+  "description": "High-performance cryptographic operations for Bankr with WebAssembly support",
+  "main": "pkg/bankr_crypto.js",
+  "types": "pkg/bankr_crypto.d.ts",
+  "files": [
+    "pkg/bankr_crypto.js",
+    "pkg/bankr_crypto.d.ts",
+    "pkg/bankr_crypto.wasm"
+  ],
+  "scripts": {
+    "build": "wasm-pack build --target web --out-dir pkg",
+    "test": "cargo test",
+    "publish": "npm publish"
+  },
+  "keywords": ["bankr", "crypto", "rust", "webassembly", "ed25519", "sha256"],
+  "author": "Bankr Team",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/bankr/create-bankr-app"
+  },
+  "homepage": "https://docs.bankr.bot/wasm",
+  "bugs": {
+    "url": "https://github.com/bankr/create-bankr-app/issues"
+  }
+}
